@@ -21,6 +21,7 @@ public class Logic
         GameData.Instance.Init();
         self=new Player();
         self.RegisterOnEndTurn(PlayerEndTurn);
+        self.IsSelf = false;
         oppo =new Player();
         oppo.RegisterOnEndTurn(PlayerEndTurn);
         oppo.IsSelf = false;
@@ -263,7 +264,7 @@ public class Deck : IList<Card>, IComparable<Deck>
     public int CompareTo(Deck other)
     {
         //TODO: 比较两个牌组的大小
-        return 0;
+        return this.GetScore()-other.GetScore();
     }
     #endregion
     
@@ -384,6 +385,36 @@ public class Deck : IList<Card>, IComparable<Deck>
         _onDiscard = discard;
     }
     private Discard _onDiscard;
+
+
+    public int GetScore()
+    {
+        if (this.Count == 3)
+        {
+            //同一花色
+            if (this[1].Type == this[0].Type&&this[1].Type==this[2].Type)
+            {
+                //顺子
+                if (this[1].Num - this[0].Num == this[2].Num - this[1].Num)
+                {
+                    //同花顺
+                    return 400 + this[0].Num + this[1].Num + this[2].Num;
+                }
+                //同花
+                return 200 + this[0].Num + this[1].Num + this[2].Num;
+            }//3条
+            else if (this[0].Num == this[1].Num && this[1].Num == this[2].Num)
+            {
+                return 300 + this[0].Num + this[1].Num + this[2].Num;
+            }//顺子
+            else if (this[1].Num - this[0].Num == this[2].Num - this[1].Num)
+            {
+                return 100 + this[0].Num + this[1].Num + this[2].Num;
+            }
+            return this[0].Num + this[1].Num + this[2].Num;
+        }
+        return 0;
+    }
     #endregion
 }
 

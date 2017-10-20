@@ -23,6 +23,8 @@ namespace BattleLineVS
         public MainWindow()
         {
             InitializeComponent();
+            Logic.Instance.Init();
+            Logic.Instance.StartGame();
         }
     }
 
